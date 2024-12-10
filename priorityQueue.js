@@ -1,10 +1,16 @@
-class MaxBinaryHeap {
+// Write a Min Binary Heap for Priority Queue - lower number means higher priority
+// Each Node has a val and a priority. use the priority to build the heap
+// Enqueue method accepts a value and priority, makes a new node, and puts it in the right spot based off of its priority
+// Dequeue method removes root element, returns it, and rearranges heap using priority
+
+class PriorityQueue {
   constructor() {
-    this.values = [41, 39, 33, 18, 27, 12];
+    this.values = [];
   }
 
-  insert(element) {
-    this.values.push(element);
+  enqueue(val, priority) {
+    let newNode = new Node(val, priority);
+    this.values.push(newNode);
     this.bubbleUp();
   }
 
@@ -15,7 +21,7 @@ class MaxBinaryHeap {
       let parentIdx = Math.floor((idx - 1) / 2);
       let parent = this.values[parentIdx];
 
-      if (element <= parent) break;
+      if (element.priority >= parent.priority) break;
       // Swap values
       this.values[parentIdx] = element;
       this.values[idx] = parent;
@@ -23,8 +29,8 @@ class MaxBinaryHeap {
     }
   }
 
-  extractMax() {
-    const max = this.values[0];
+  dequeue() {
+    const min = this.values[0];
     const end = this.values.pop();
 
     // For when not empty
@@ -33,7 +39,7 @@ class MaxBinaryHeap {
       this.bubbleDown();
     }
 
-    return max;
+    return min;
   }
 
   bubbleDown() {
@@ -48,14 +54,14 @@ class MaxBinaryHeap {
 
       if (leftChildIdx < length) {
         leftChild = this.values[leftChildIdx];
-        if (leftChild > element) {
+        if (leftChild.priority < element.priority) {
           swap = leftChildIdx;
         }
       }
 
       if (rightChildIdx < length) {
         rightChild = this.values[rightChildIdx];
-        if ((swap === null && rightChild > element) || (swap !== null && rightChild > leftChild)) {
+        if ((swap === null && rightChild.priority < element.priority) || (swap !== null && rightChild.priority < leftChild.priority)) {
           swap = rightChildIdx;
         }
       }
@@ -70,15 +76,18 @@ class MaxBinaryHeap {
   }
 }
 
-let heap = new MaxBinaryHeap();
-heap.insert(55);
-console.log(heap.values);
-heap.insert(1);
-console.log(heap.values);
-heap.extractMax();
-heap.extractMax();
-heap.extractMax();
-heap.extractMax();
-heap.extractMax();
-heap.extractMax();
-console.log(heap.values);
+class Node {
+  constructor(val, priority) {
+    this.val = val;
+    this.priority = priority;
+  }
+}
+
+let ER = new PriorityQueue();
+ER.enqueue("common cold", 5);
+ER.enqueue("gunshot wound", 1);
+ER.enqueue("high fever", 4);
+ER.enqueue("broken arm", 2);
+console.log(ER);
+ER.dequeue(); // removes highest priority (lowest num)
+console.log(ER);
